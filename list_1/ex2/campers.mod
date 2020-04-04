@@ -5,6 +5,7 @@ param distances{Cities, Cities}, >= 0;
 param redundancy{Campers, Cities}, >= 0;
 param deficiency{Campers, Cities}, >= 0;
 param transport_costs{Campers}, >= 0;
+param could_replace symbolic in Campers;
 
 display redundancy;
 
@@ -21,7 +22,7 @@ minimize cost_func: sum{camp in Campers}(
 subject to move_all_redundant_campers{c1 in Cities, camp in Campers}: sum{c2 in Cities} solution[c1, c2, camp] == redundancy[camp, c1];
 
 # deficiency requirements
-subject to move_more_VIPs_than_deficiency{c1 in Cities}: sum{c2 in Cities} solution[c2, c1, 'VIP'] >= deficiency['VIP', c1];
+subject to move_more_VIPs_than_deficiency{c1 in Cities}: sum{c2 in Cities} solution[c2, c1, could_replace] >= deficiency[could_replace, c1];
 subject to sent_equal_to_deficiency{c1 in Cities}: 
     sum{camp in Campers}(
         sum{c2 in Cities} solution[c2, c1, camp]
@@ -69,5 +70,7 @@ param redundancy: Berlin Bratyslawa Brno Budapeszt Koszyce Lipsk Praga Rostok Gd
 param transport_costs :=
     Standard 1.0
     VIP 1.15;
+
+param could_replace := VIP;
 
 end;
