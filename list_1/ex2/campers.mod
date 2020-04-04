@@ -7,8 +7,6 @@ param deficiency{Campers, Cities}, >= 0;
 param transport_costs{Campers}, >= 0;
 param could_replace symbolic in Campers;
 
-display redundancy;
-
 # solution of problem
 var solution{Cities, Cities, Campers}, integer, >= 0;
 
