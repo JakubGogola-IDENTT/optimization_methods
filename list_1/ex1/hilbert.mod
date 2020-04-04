@@ -27,17 +27,22 @@ var x{i in {1..n}}, >=0;
 
 minimize cost_func: sum{i in {1..n}} x[i] * c[i];
 
-subject to hilbert_matrix{i in {1..n}}: sum{j in {1..n}} x[i] * A[i, j] = b[i];
+subject to solved_x{i in {1..n}}: sum{j in {1..n}} x[i] * A[i, j] = b[i];
 
 solve;
 
-printf: "\nx[i]:\n";
+printf: "\nsolved_x[i]:\n";
 for {i in {1..n}} {
-    printf: "%f\n", x[i];
+    printf: "%f\n", solved_x[i];
+}
+
+printf: "\nerror[i]:\n";
+for {i in {1..n}} {
+    printf: "%f\n", abs(solved_x[i] - x[i]) / abs(solved_x[i]);
 }
 
 data;
 
-param n := 1000;
+param n := 10;
 
 end;
