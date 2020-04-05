@@ -36,6 +36,8 @@ for{c1 in Cities} {
     }
 }
 
+display cost_func;
+
 # data section
 data;
 

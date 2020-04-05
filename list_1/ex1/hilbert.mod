@@ -8,20 +8,23 @@ var x{i in {1..n}}, >=0;
 
 minimize cost_func: sum{i in {1..n}} x[i] * c[i];
 
-subject to solved_x{i in {1..n}}: sum{j in {1..n}} x[i] * A[i, j] = b[i];
+subject to solution{i in {1..n}}: sum{j in {1..n}} x[i] * A[i, j] = b[i];
 
 solve;
 
-printf: "\nsolved_x[i]:\n";
+printf: "\solution[i]:\n";
 for {i in {1..n}} {
-    printf: "%f\n", solved_x[i];
+    printf: "%f\n", solution[i];
 }
 
-printf: "\nerror[i]:\n";
-for {i in {1..n}} {
-    printf: "%f\n", abs(solved_x[i] - x[i]) / abs(solved_x[i]);
-}
-
+printf "error %.20f\n",
+    sqrt(
+        sum{i in {1..n}} ((x[i] - solution[i]) * (x[i] - solution[i]))
+    ) 
+    /
+    sqrt(
+        sum{i in {1..n}} x[i] * x[i]
+    );
 # data section
 data;
 
