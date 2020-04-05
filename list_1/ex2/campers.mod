@@ -11,9 +11,9 @@ param could_replace symbolic in Campers;
 var solution{Cities, Cities, Campers}, integer, >= 0;
 
 minimize cost_func: sum{camp in Campers}(
-    sum{c1 in Cities, c2 in Cities}(
+    sum{c1 in Cities, c2 in Cities}
         distances[c1, c2] * solution[c1, c2, camp]
-    ) * transport_costs[camp]
+    * transport_costs[camp]
 );
 
 # redundancy requirements
@@ -31,12 +31,12 @@ solve;
 for{c1 in Cities} {
     for{c2 in Cities} {
         for{camp in Campers} {
-            printf (if solution[c1, c2, camp] != 0 and c1 != c2 then "Move %d %s campers from %s to %s\n" else ""), solution[c1, c2, camp], camp, c1, c2 ;
+            printf (if solution[c1, c2, camp] != 0 then "Move %d %s campers from %s to %s\n" else ""), solution[c1, c2, camp], camp, c1, c2 ;
         }
     }
 }
 
-display cost_func;
+printf "Total cost: %f\n", cost_func;
 
 # data section
 data;

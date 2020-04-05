@@ -1,7 +1,7 @@
 # raw materials
-var mat_1, >= 2000, <= 6000;
-var mat_2, >= 3000, <= 5000;
-var mat_3, >= 4000, <= 7000;
+var mat_1 >= 2000, <= 6000;
+var mat_2 >= 3000, <= 5000;
+var mat_3 >= 4000, <= 7000;
 
 # products
 var prod_A, >= 0;
@@ -41,7 +41,7 @@ var waste_2_from_B, >= 0;
 var waste_3_from_B, >= 0;
 
 
-maximize cost_func: 3 * prod_A + 2.5 * prod_B + 0.6 * prod_C + 0.5 * prod_D
+maximize cost_func: 3.0 * prod_A + 2.5 * prod_B + 0.6 * prod_C + 0.5 * prod_D
     - (2.1 * mat_1 + 1.6 * mat_2 + 1.0 * mat_3)
     - (0.1 * waste_A1_to_destroy + 0.1 * waste_A2_to_destroy + 0.2 * waste_A3_to_destroy)
     - (0.05 * waste_B1_to_destroy + 0.05 * waste_B2_to_destroy + 0.4 * waste_B3_to_destroy);
@@ -77,10 +77,12 @@ subject to final_qty_of_B: prod_B = total_qty_for_B - waste_B1 - waste_B2 - wast
 
 # prod C constraints
 subject to prod_C_ingredients: prod_C = qty_C1 + waste_1_from_A + waste_2_from_A + waste_3_from_A;
-subject to mat_1_in_prod_C: qty_C1 = 0.3 * prod_C;
+subject to mat_1_in_prod_C: qty_C1 = 0.2 * prod_C;
+
 subject to waste_1_from_A_relation: waste_1_from_A <= waste_A1;
 subject to waste_2_from_A_relation: waste_2_from_A <= waste_A2;
 subject to waste_3_from_A_relation: waste_3_from_A <= waste_A3;
+
 subject to waste_1_from_A_to_destroy: waste_A1_to_destroy = waste_A1 - waste_1_from_A;
 subject to waste_2_from_A_to_destroy: waste_A2_to_destroy = waste_A2 - waste_2_from_A;
 subject to waste_3_from_A_to_destroy: waste_A3_to_destroy = waste_A3 - waste_3_from_A;
@@ -89,9 +91,11 @@ subject to waste_3_from_A_to_destroy: waste_A3_to_destroy = waste_A3 - waste_3_f
 # prod D constraints
 subject to prod_D_ingredients: prod_D == qty_D2 + waste_1_from_B + waste_2_from_B + waste_3_from_B;
 subject to mat_2_in_prod_D: qty_D2 = 0.3 * prod_D;
+
 subject to waste_1_from_B_relation: waste_1_from_B <= waste_B1;
 subject to waste_2_from_B_relation: waste_2_from_B <= waste_B2;
 subject to waste_3_from_B_relation: waste_3_from_B <= waste_B3;
+
 subject to waste_1_from_B_to_destroy: waste_B1_to_destroy = waste_B1 - waste_1_from_B;
 subject to waste_2_from_B_to_destroy: waste_B2_to_destroy = waste_B2 - waste_2_from_B;
 subject to waste_3_from_B_to_destroy: waste_B3_to_destroy = waste_B3 - waste_3_from_B;
@@ -104,6 +108,12 @@ printf "\n### Quantity of materials\n";
 printf "Quantity of material 1: %f\n", mat_1;
 printf "Quantity of material 2: %f\n", mat_2;
 printf "Quantity of material 3: %f\n", mat_3;
+
+printf "\n### Quantity of products\n";
+printf "Quantity of product A: %f\n", prod_A;
+printf "Quantity of product B: %f\n", prod_B;
+printf "Quantity of product C: %f\n", prod_C;
+printf "Quantity of product D: %f\n", prod_D;
 
 printf "\n### Division of materials\n";
 printf "Material 1\n";
@@ -139,6 +149,3 @@ printf "--------- to destroy: %f\n", waste_2_from_B_to_destroy;
 printf "------ 3:\n";
 printf "--------- for product D: %f\n", waste_3_from_B;
 printf "--------- to destroy: %f\n", waste_3_from_B_to_destroy;
-
-
-
