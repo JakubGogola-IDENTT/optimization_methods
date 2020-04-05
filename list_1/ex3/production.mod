@@ -1,3 +1,6 @@
+# Jakub Gogola, 236412
+# Lista 1, zadanie 3
+
 # raw materials
 var mat_1 >= 2000, <= 6000;
 var mat_2 >= 3000, <= 5000;

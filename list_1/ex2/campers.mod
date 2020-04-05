@@ -1,3 +1,6 @@
+# Jakub Gogola, 236412
+# Lista 1, zadanie 2
+
 set Cities;
 set Campers;
 

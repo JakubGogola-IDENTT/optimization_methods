@@ -1,3 +1,6 @@
+# Jakub Gogola 236412
+# Lista 1, zadanie 1
+
 param n, integer, > 0;
 
 param A{i in {1..n}, j in {1..n}} := 1/(i + j - 1);
