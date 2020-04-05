@@ -96,7 +96,49 @@ subject to waste_1_from_B_to_destroy: waste_B1_to_destroy = waste_B1 - waste_1_f
 subject to waste_2_from_B_to_destroy: waste_B2_to_destroy = waste_B2 - waste_2_from_B;
 subject to waste_3_from_B_to_destroy: waste_B3_to_destroy = waste_B3 - waste_3_from_B;
 
-
 solve;
 
-display cost_func;
+printf "### Total profit: %f\n", cost_func;
+
+printf "\n### Quantity of materials\n";
+printf "Quantity of material 1: %f\n", mat_1;
+printf "Quantity of material 2: %f\n", mat_2;
+printf "Quantity of material 3: %f\n", mat_3;
+
+printf "\n### Division of materials\n";
+printf "Material 1\n";
+printf "--- A: %f\n", qty_A1;
+printf "--- B: %f\n", qty_B1;
+printf "--- C: %f\n", qty_C1;
+printf "Material 2\n";
+printf "--- A: %f\n", qty_A2;
+printf "--- B: %f\n", qty_B2;
+printf "--- D: %f\n", qty_D2;
+printf "Material 3\n";
+printf "--- A: %f\n", qty_A3;
+printf "--- B: %f\n", qty_B3;
+
+printf "\n### Divsion of wastes\n";
+printf "--- from A:\n";
+printf "------ 1:\n";
+printf "--------- for product C: %f\n", waste_1_from_A;
+printf "--------- to destroy: %f\n", waste_1_from_A_to_destroy;
+printf "------ 2:\n";
+printf "--------- for product C: %f\n", waste_2_from_A;
+printf "--------- to destroy: %f\n", waste_2_from_A_to_destroy;
+printf "------ 3:\n";
+printf "--------- for product C: %f\n", waste_3_from_A;
+printf "--------- to destroy: %f\n", waste_3_from_A_to_destroy;
+printf "--- from B:\n";
+printf "------ 1:\n";
+printf "--------- for product D: %f\n", waste_1_from_B;
+printf "--------- to destroy: %f\n", waste_1_from_B_to_destroy;
+printf "------ 2:\n";
+printf "--------- for product D: %f\n", waste_2_from_B;
+printf "--------- to destroy: %f\n", waste_2_from_B_to_destroy;
+printf "------ 3:\n";
+printf "--------- for product D: %f\n", waste_3_from_B;
+printf "--------- to destroy: %f\n", waste_3_from_B_to_destroy;
+
+
+
