@@ -1,6 +1,7 @@
 # Vector T contains times which are required to search every server
 T = [2 1 3]
 
+# TODO: change data
 # Matrix Q contains info about servers where are stored informations about each characteristic of population
 Q = [
     [1 1 0],
