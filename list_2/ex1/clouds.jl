@@ -20,6 +20,7 @@ function find_optimal_search_path(model::Model, Q::Any, T::Array{Int64})
     # Vector containing information which servers should be searched (solution)
     @variable(model, p[1:n] >= 0)
     
+    
     # function to minimalize - time for searched servers should be minimal
     @objective(model, Min, sum(p[j] * T[j] for j in 1:n))
 
@@ -27,6 +28,11 @@ function find_optimal_search_path(model::Model, Q::Any, T::Array{Int64})
     @constraint(model, [i in 1:m], sum(Q[i][j] * p[j] for j in 1:n) == 1)
 
     optimize!(model)
+
+    for (idx, val) in enumerate(p)
+        println("Server $idx: $(value(val))")
+    end
+
 end
 
 function run()
@@ -34,7 +40,4 @@ function run()
     set_optimizer(model, GLPK.Optimizer)
 
     find_optimal_search_path(model, Q, T)
-
-    println(termination_status(model))
-    println(model)
 end
