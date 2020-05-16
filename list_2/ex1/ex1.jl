@@ -31,6 +31,10 @@ function find_optimal_search_path(model::Model, Q::Any, T::Array{Int64})
 
     optimize!(model)
 
+    println(termination_status(model))
+
+    println("Total time: $(objective_value(model))")
+
     for (idx, val) in enumerate(s)
         println("Server $idx: $(value(val))")
     end

@@ -1,3 +1,6 @@
+# Jakub Gogola 236412
+# Lista 2, zadanie 1
+
 # Tablica T zawiera informacje o czasie potrzebnym do przeszukania każdego serwera.
 T = [6 3 2]
 

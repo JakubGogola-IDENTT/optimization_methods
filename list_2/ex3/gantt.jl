@@ -1,3 +1,7 @@
+# Jakub Gogola 236412
+# Lista 2, zadanie 3
+
+
 function get_finish_time(T, duration)
     # Number of tasks.
     m::Int64 = length(T[:, 1])

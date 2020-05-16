@@ -1,17 +1,12 @@
-# Matrix with tasks' duration times for every processor P1, P2 and P3
-# T = [
-#     3 2 1;
-#     2 1 3;
-#     1 2 3;
-#     3 1 2;
-# ]
+# Jakub Gogola 236412
+# Lista 2, zadanie 3
 
+
+# Macierz T zawiera infomacje o czasie wykonywania każdego zadania na każdym z procesorów.
+# Wiersze macierzy reprezentują zadania, a kolumny - procesory.
 T = [
-    3       3       2;
-    9       3       8;
-    9       8       5;
-    4       8       4;
-    6      10       3;
-    6       3       1;
-    7      10       3
+    4 2 2;
+    4 3 1;
+    2 4 2;
+    1 3 2;
 ]
