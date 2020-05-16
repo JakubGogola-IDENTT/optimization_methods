@@ -1,10 +1,10 @@
-# TODO: change data
-# Vector T contains times which are required to search every server
-T = [2 1 3]
+# Tablica T zawiera informacje o czasie potrzebnym do przeszukania każdego serwera.
+T = [6 3 2]
 
-# Matrix Q contains info about servers where are stored informations about each characteristic of population
+# Macierz Q zawiera informacje o serwerach, gdzie zapisane są informacje o każdej z cech.
+# Każdy wiersz tablicy Q reprezentuje cechę, a kolumna - serwer.
 Q = [
-    [1 1 0],
-    [0 0 1],
-    [1 1 0]
+    [1 0 1],
+    [1 0 1],
+    [0 1 0]
 ]

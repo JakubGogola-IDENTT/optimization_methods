@@ -7,29 +7,31 @@ using GLPK
 include("./data.jl")
 
 """
-This function finds optimal path between servers to find infomration about all popoulation's characteristics
+Funkcja znajduje optymalną ściężkę pomiędzy poszczególnymi serwerami w celu zminimalizowania czasu potrzebnego na odczyt danych
 
-model - reference to JuMP model
-Q - array containing information where informations about each characteristic is stored
-T - array containing times required to search every server
+model - referencja do modelu
+Q - macierz zawierająca informacje o rozmieszczeniu informacji o poszczególnych cechach na serwerach
+T - tablica zawierająca informacje o czasie potrzebnym na przeszukanie każdego serwera
 """
 function find_optimal_search_path(model::Model, Q::Any, T::Array{Int64})
+    # Liczba cech.
     m::Int64 = length(Q)
+
+    # Liczba serwerów.
     n::Int64 = length(T)
 
-    # Vector containing information which servers should be searched (solution)
-    @variable(model, p[1:n] >= 0)
+    # Zmienna s to tabliza zwierająca informacje, które serwery powinny zostać przeszukane (wartości binarne).
+    @variable(model, s[1:n], Bin)
     
-    
-    # function to minimalize - time for searched servers should be minimal
-    @objective(model, Min, sum(p[j] * T[j] for j in 1:n))
+    # Funkcja celu - minimalizowany jest sumaryczny czas poszukiwania informacji.
+    @objective(model, Min, sum(s[j] * T[j] for j in 1:n))
 
-    # constraint - we want to ensure that for each characteristic we used only one server to find it
-    @constraint(model, [i in 1:m], sum(Q[i][j] * p[j] for j in 1:n) == 1)
+    # Ograniczenie - do odczytu danych dotyczących danej cechy użyto dokładnie jednego serwera.
+    @constraint(model, [i in 1:m], sum(Q[i][j] * s[j] for j in 1:n) == 1)
 
     optimize!(model)
 
-    for (idx, val) in enumerate(p)
+    for (idx, val) in enumerate(s)
         println("Server $idx: $(value(val))")
     end
 
