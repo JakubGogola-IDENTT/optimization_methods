@@ -33,14 +33,27 @@ function parse_file(path)
 
         idx += 1
         costs = []
-        for i in idx:(idx + machines_count)
-            push!(costs, data[i]) 
+        for i in idx:(idx + machines_count - 1)
+            tmp = deepcopy(data[i])
+
+            while length(data[i + 1]) !== jobs_count && length(tmp) < jobs_count
+                append!(tmp, data[i + 1])
+                deleteat!(data, i + 1)
+            end
+            push!(costs, tmp) 
         end
 
         idx += machines_count - 1
         resources = []
-        for i in idx:(idx + machines_count)
-            push!(resources, data[i])
+        for i in idx:(idx + machines_count - 1)
+            tmp = deepcopy(data[i])
+
+            while length(data[i + 1]) != jobs_count && length(tmp) < jobs_count
+                append!(tmp, data[i + 1])
+                deleteat!(data, i + 1)
+            end
+
+            push!(resources, tmp)
         end
 
         idx += machines_count
