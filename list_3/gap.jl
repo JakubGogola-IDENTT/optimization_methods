@@ -13,13 +13,7 @@ function solve_gap(problem_data)
     M = 1:machines_count
 
     # Bipartite graph representation.
-    graph = []
-
-    for i in M
-        for j in J
-            push!(graph, (i, j))
-        end
-    end
+    graph = [(i, j) for i in M for j in J]
 
     J_1 = [j for j in J]
     M_1 = [i for i in M]
@@ -50,6 +44,8 @@ function solve_gap(problem_data)
 
         solution = value.(x)
 
+        println(termination_status(model))
+
         filter!(((i, j),) -> solution[i, j] != 0, graph)
 
         for i in M
@@ -63,14 +59,14 @@ function solve_gap(problem_data)
         end
 
         for i in M
-            degree = length([e for e in graph if e[1] != 1])
+            deg = length([e for e in graph if e[1] != 1])
             sum = 0
 
             for j in J
                 sum += solution[i, j]
             end
 
-            if degree == 1 || (degree == 2 && sum >= 1)
+            if deg == 1 || (deg == 2 && sum >= 1)
                 filter!(v -> v != i, M_1)
             end
         end
@@ -85,3 +81,12 @@ function run(path)
     end
 end
 
+function run_all(dir_path, n)
+    for i in 1:n
+        problems = parse_file("$dir_path/gap$i.txt")
+
+        for p in problems
+            solve_gap(p)
+        end
+    end
+end
