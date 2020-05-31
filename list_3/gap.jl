@@ -21,8 +21,6 @@ function solve_gap(problem_data)
         end
     end
 
-    println(graph)
-
     J_1 = [j for j in J]
     M_1 = [i for i in M]
     F = []
@@ -37,7 +35,7 @@ function solve_gap(problem_data)
         for j in J
             if in(j, J_1)
                 edges = [e for e in graph if e[2] == j]
-                @constraint(model, sum(x[i,j_1] for (i, j_1) in edges) == 1)
+                @constraint(model, sum(x[i, j_1] for (i, j_1) in edges) == 1)
             end
         end
 
@@ -45,6 +43,35 @@ function solve_gap(problem_data)
             if in(i, M_1)
                 edges = [e for e in graph if e[1] == i]
                 @constraint(model, sum(x[i_1, j] * resources[i_1, j] for (i_1, j) in edges) <= capacities[i])
+            end
+        end
+
+        optimize!(model)
+
+        solution = value.(x)
+
+        filter!(((i, j),) -> solution[i, j] != 0, graph)
+
+        for i in M
+            for j in J
+                if solution[i, j] - 1.0 <= eps(Float64)
+                    push!(F, (i, j))
+                    filter!(v -> v != j, J_1)
+                    capacities[i] -= resources[i, j]
+                end
+            end
+        end
+
+        for i in M
+            degree = length([e for e in graph if e[1] != 1])
+            sum = 0
+
+            for j in J
+                sum += solution[i, j]
+            end
+
+            if degree == 1 || (degree == 2 && sum >= 1)
+                deleteat!(M_1, findfirst(v -> v == i, M_1))
             end
         end
     end
