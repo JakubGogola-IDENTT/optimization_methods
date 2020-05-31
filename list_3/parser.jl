@@ -1,3 +1,6 @@
+# Jakub Gogola 236412
+# Lista 3, zadanie 1
+
 function parse_line(line)
     parsed_line = convert(String, lstrip(line))
     parsed_line = split(parsed_line, ' ')
