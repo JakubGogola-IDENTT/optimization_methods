@@ -23,17 +23,30 @@ function solve_gap(problem_data)
 
     println(graph)
 
-    # J' = [j for j in J]
-    # M' = [i for i in M]
-    # F = []
+    J_1 = [j for j in J]
+    M_1 = [i for i in M]
+    F = []
 
-    while length(J) > 0
+    while length(J_1) > 0
         model = Model(GLPK.Optimizer)
 
         @variable(model, x[M, J] >= 0)
 
         @objective(model, Min, sum(costs[i, j] * x[i, j] for (i, j) in graph))
 
+        for j in J
+            if in(j, J_1)
+                edges = [e for e in graph if e[2] == j]
+                @constraint(model, sum(x[i,j_1] for (i, j_1) in edges) == 1)
+            end
+        end
+
+        for i in M
+            if in(i, M_1)
+                edges = [e for e in graph if e[1] == i]
+                @constraint(model, sum(x[i_1, j] * resources[i_1, j] for (i_1, j) in edges) <= capacities[i])
+            end
+        end
     end
 end
 
