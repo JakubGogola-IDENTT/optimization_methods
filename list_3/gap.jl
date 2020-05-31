@@ -71,7 +71,7 @@ function solve_gap(problem_data)
             end
 
             if degree == 1 || (degree == 2 && sum >= 1)
-                deleteat!(M_1, findfirst(v -> v == i, M_1))
+                filter!(v -> v != i, M_1)
             end
         end
     end
