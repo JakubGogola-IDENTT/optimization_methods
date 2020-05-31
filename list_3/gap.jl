@@ -5,38 +5,44 @@ using JuMP
 using GLPK
 
 include("parser.jl")
-include("printer.jl")
+include("data_analysis.jl")
 
 function solve_gap(problem_data)
+    # costs - koszty wykonywania zadań na poszczególnych maszynach.
+    # resources - czasy dostępności dla danej maszyny
+    # capacities - czasy niezbędne do przetworzenia zadania przez konkretną maszynę
     machines_count, jobs_count, costs, resources, capacities = problem_data
 
-    # Vertices representing jobs.
+    # Wierzchołki reprezentujące zadania.
     J = 1:jobs_count
 
-    # Vertices representing machines.
+    # Wierzchołki reprezentujące maszyny.
     M = 1:machines_count
 
-    # Bipartite graph representation (set of edges).
+    # Graf dwudzielny (początkowo - graf pełny) reprezentujacy połączenia zadanie - maszyna).
     graph = [(i, j) for i in M for j in J]
 
     J_1 = [j for j in J]
     M_1 = [i for i in M]
     F = []
 
-    # Iterations counter.
+    # Licznik iteracji.
     counter = 0
     progress = []
 
     while length(J_1) > 0
         model = Model(GLPK.Optimizer)
 
+        # Zmienne decyzyjne.
         @variable(model, x[M, J] >= 0)
 
+        # Minimalizujemy koszt wykonania wszystkich zadań.
         @objective(model, Min, sum(costs[i, j] * x[i, j] for (i, j) in graph))
 
         for j in J
             if in(j, J_1)
                 edges = [e for e in graph if e[2] == j]
+                # Każde zadanie wykonywane jest na dokładnie jednej maszynie.
                 @constraint(model, sum(x[i, j_1] for (i, j_1) in edges) == 1)
             end
         end
@@ -44,6 +50,7 @@ function solve_gap(problem_data)
         for i in M
             if in(i, M_1)
                 edges = [e for e in graph if e[1] == i]
+                # Zadania nie są wykonywane na maszynie dlużej niż wynosi czas jej dostępności.
                 @constraint(model, sum(x[i_1, j] * resources[i_1, j] for (i_1, j) in edges) <= capacities[i])
             end
         end
@@ -57,15 +64,20 @@ function solve_gap(problem_data)
         for i in M
             for j in J
                 if abs(solution[i, j] - 1.0) <= eps(Float64)
+                    # Jeżeli zadaniu przypisano maszynę to wtedy dodajemy parę maszyna - zadanie do zbioru F.
                     push!(F, (i, j))
                     filter!(v -> v != j, J_1)
+                    # Zmniejsza się dostępność zasobów maszyny.
                     capacities[i] -= resources[i, j]
                 end
             end
         end
 
         filter!(M_1) do i
+            # Usuwane są maszyny, dla których stopien wierzhołka wynosi 1.
             deg = length([e for e in graph if e[1] == i])
+
+            # Usuwane są maszyny, dla których stopień wierzchołka wynosi 2 i ktorym przypisano wco namniej jedno zadanie.
             !(deg == 1 || (deg == 2 && (sum([solution[i, j] for j in J_1]) >= 1)))
         end
 
@@ -111,6 +123,9 @@ function run_all()
                 machine_usage = sum(resources[t[1], t[2]] for t in machine_tasks)
 
                 usages[i] = machine_usage
+
+                # Sprawdzenie czy dla danej maszyny nie przekroczono warunku < 2Ti
+                @assert machine_usage < 2 * capacities[i] "Usage of machine $i exceeded"
             end
 
             push!(
@@ -131,8 +146,9 @@ function run_all()
         end
     end
 
-    # Metoda printer wyświetla podsumowanie działania algorytmu dla zadanych danych.
-    printer(summary)
+    # Metoda analyze wyświetla podsumowanie działania algorytmu dla zadanych danych.
+    analyze(summary)
+    # to_latex(summary)
 end
 
 # run_all()

@@ -1,4 +1,4 @@
-function printer(summary)
+function analyze(summary)
     n = 0
 
     for s in summary
@@ -54,5 +54,42 @@ function printer(summary)
         n %= 5
 
         println()
+    end
+end
+
+function to_latex(summary)
+    iterations = []
+    times = []
+
+    n = 0
+    for s in summary
+        n += 1
+        
+        it = s["iterations"]
+        time = s["time"] * 1000
+        time = round(time; digits=2)
+
+        name = s["name"]
+        name = replace(name, "data/" => "")
+        name = replace(name, ".txt" => "")
+        
+        jobs = s["jobs"]
+        machines = s["machines"]
+
+        problem = "c$machines$jobs-$n"
+
+        usages = s["usages"]
+        capacities = s["capacities"]
+
+        max_usage = findmax(usages)[1]
+
+        max_capacity = findmax(capacities)[1]
+
+        avg_capacity = Float64(max_usage / max_capacity)
+        avg_capacity = round(avg_capacity; digits=3)
+
+        println("$name & $problem & $it & $time & $max_usage & $max_capacity & $avg_capacity \\\\ \\hline")
+
+        n %= 5
     end
 end
