@@ -1,3 +1,7 @@
+# Jakub Gogola 236412
+# Lista 3, zadanie 1
+
+# Drukuje sformatowany wynik działania algorytmu
 function analyze(summary)
     n = 0
 
@@ -57,6 +61,7 @@ function analyze(summary)
     end
 end
 
+# Funkcja pomocnicza do umieszczenia danych w tabeli w formacie LaTeX-a
 function to_latex(summary)
     iterations = []
     times = []
